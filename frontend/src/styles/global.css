@@ -1,0 +1,17 @@
+body {
+    background-color: #fff5f7; /* Very light pink background */
+    font-family: 'Nunito', sans-serif;
+    color: #4a4a4a;
+}
+
+/* Custom Scrollbar for the cute look */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #fff5f7;
+}
+::-webkit-scrollbar-thumb {
+    background: #ffc2d1;
+    border-radius: 10px;
+}
