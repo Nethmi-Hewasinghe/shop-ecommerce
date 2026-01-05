@@ -15,8 +15,8 @@ const ChatbotContainer = styled.div`
   border-radius: 10px;
   overflow: hidden;
   transition: all 0.3s ease;
-  transform: ${(props) => (props.isOpen ? 'translateY(0)' : 'translateY(calc(100% - 60px))')};
-  height: ${(props) => (props.isOpen ? '500px' : '60px')};
+  transform: ${(props) => (props.$isOpen ? 'translateY(0)' : 'translateY(calc(100% - 60px))')};
+  height: ${(props) => (props.$isOpen ? '500px' : '60px')};
   background: white;
   display: flex;
   flex-direction: column;
@@ -68,9 +68,9 @@ const Message = styled.div`
   margin: 5px 0;
   padding: 10px 15px;
   border-radius: 15px;
-  background: ${(props) => (props.isBot ? '#fff' : '#6c63ff')};
-  color: ${(props) => (props.isBot ? '#333' : '#fff')};
-  align-self: ${(props) => (props.isBot ? 'flex-start' : 'flex-end')};
+  background: ${(props) => (props.$isBot ? '#fff' : '#6c63ff')};
+  color: ${(props) => (props.$isBot ? '#333' : '#fff')};
+  align-self: ${(props) => (props.$isBot ? 'flex-start' : 'flex-end')};
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   word-wrap: break-word;
   line-height: 1.4;
@@ -136,11 +136,11 @@ const ChatbotButton = styled.button`
   justify-content: center;
   z-index: 1001;
   transition: all 0.3s ease;
-  transform: ${(props) => (props.isOpen ? 'scale(0)' : 'scale(1)')};
-  opacity: ${(props) => (props.isOpen ? '0' : '1')};
+  transform: ${(props) => (props.$isOpen ? 'scale(0)' : 'scale(1)')};
+  opacity: ${(props) => (props.$isOpen ? '0' : '1')};
 
   &:hover {
-    transform: ${(props) => (props.isOpen ? 'scale(0)' : 'scale(1.1)')};
+    transform: ${(props) => (props.$isOpen ? 'scale(0)' : 'scale(1.1)')};
     background: #5a52d4;
   }
 `;
@@ -150,7 +150,7 @@ const QuickRepliesContainer = styled.div`
   flex-wrap: wrap;
   gap: 8px;
   margin: 5px 0 15px;
-  justify-content: ${(props) => (props.isBot ? 'flex-start' : 'flex-end')};
+  justify-content: ${(props) => (props.$isBot ? 'flex-start' : 'flex-end')};
 `;
 
 const QuickReplyButton = styled.button`
@@ -317,12 +317,12 @@ const Chatbot = () => {
   return (
     <>
       {!isOpen && (
-        <ChatbotButton onClick={() => setIsOpen(true)} isOpen={isOpen}>
+        <ChatbotButton onClick={() => setIsOpen(true)} $isOpen={isOpen}>
           <FaRobot size={24} />
         </ChatbotButton>
       )}
 
-      <ChatbotContainer isOpen={isOpen}>
+      <ChatbotContainer $isOpen={isOpen}>
         <ChatHeader onClick={() => setIsOpen(!isOpen)}>
           <div>
             <FaRobot style={{ marginRight: '10px' }} />
@@ -342,7 +342,7 @@ const Chatbot = () => {
             <ChatContent>
               {messages.map((message, index) => (
                 <React.Fragment key={index}>
-                  <Message isBot={message.isBot}>
+                  <Message $isBot={message.isBot}>
                     {message.text}
                     {message.actions && (
                       <div style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -360,7 +360,7 @@ const Chatbot = () => {
                     )}
                   </Message>
                   {message.quickReplies && (
-                    <QuickRepliesContainer isBot={message.isBot}>
+                    <QuickRepliesContainer $isBot={message.isBot}>
                       {message.quickReplies.map((reply, i) => (
                         <QuickReplyButton
                           key={i}
@@ -375,7 +375,7 @@ const Chatbot = () => {
                 </React.Fragment>
               ))}
               {isTyping && (
-                <Message isBot={true}>
+                <Message $isBot={true}>
                   <div style={{ display: 'flex', gap: '5px' }}>
                     <div className="typing-dot" style={{ 
                       height: '8px', 
@@ -425,7 +425,7 @@ const Chatbot = () => {
         )}
       </ChatbotContainer>
 
-      <style jsx global>{`
+      <style jsx="true" global="true">{`
         @keyframes typing {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-5px); }

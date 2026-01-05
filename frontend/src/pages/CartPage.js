@@ -138,17 +138,19 @@ const CartPage = () => {
                                             as='select' 
                                             value={item.qty} 
                                             onChange={(e) => addToCart(item, Number(e.target.value))}
-                                            disabled={loading}
+                                            disabled={loading || (stockStatus[item._id] || 0) === 0}
                                         >
-                                            {[...Array(Math.min(10, (stockStatus[item._id] || 0) + item.qty)).keys()].map((x) => (
-                                                <option 
-                                                    key={x + 1} 
-                                                    value={x + 1}
-                                                    disabled={x + 1 > (stockStatus[item._id] || 0) + item.qty}
-                                                >
-                                                    {x + 1}
-                                                </option>
-                                            ))}
+                                            {[...Array(stockStatus[item._id] || 0).keys()].map((x) => {
+                                                const quantity = x + 1;
+                                                return (
+                                                    <option 
+                                                        key={quantity}
+                                                        value={quantity}
+                                                    >
+                                                        {quantity}
+                                                    </option>
+                                                );
+                                            })}
                                         </Form.Control>
                                         {stockStatus[item._id] !== undefined && (
                                             <div className="small text-muted">

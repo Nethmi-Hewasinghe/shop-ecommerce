@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login } from '../features/auth/authSlice';
 import '../styles/global.css';
 import '../styles/RegisterPage.css';
@@ -14,11 +14,11 @@ const RegisterPage = () => {
     password: '',
     confirmPassword: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { status, error } = useSelector((state) => state.auth);
-
   const { name, email, password, confirmPassword } = formData;
 
   const handleChange = (e) => {
@@ -32,42 +32,46 @@ const RegisterPage = () => {
     e.preventDefault();
     
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      setError('Passwords do not match');
       return;
     }
 
+    setIsLoading(true);
+    setError(null);
+
     try {
-      // Register the user
       const config = {
         headers: {
           'Content-Type': 'application/json',
         },
       };
 
-      const { data } = await axios.post(
+      // Register the user
+      await axios.post(
         'http://localhost:5000/api/users',
         { name, email, password },
         config
       );
 
       // Log in the user after registration
-      const loginResponse = await axios.post(
+      const { data } = await axios.post(
         'http://localhost:5000/api/users/login',
         { email, password },
         config
       );
       
-      // Store user info in local storage
-      localStorage.setItem('userInfo', JSON.stringify(loginResponse.data));
+      // Store user info in local storage and update Redux state
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      dispatch(login(data));
       
       navigate('/');
     } catch (error) {
       console.error('Registration failed:', error);
-      alert(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : 'Registration failed. Please try again.'
+      setError(
+        error.response?.data?.message || 'Registration failed. Please try again.'
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -143,9 +147,9 @@ const RegisterPage = () => {
           <button
             type="submit"
             className="btn-register"
-            disabled={status === 'loading'}
+            disabled={isLoading}
           >
-            {status === 'loading' ? 'Creating Account...' : 'Sign Up'}
+            {isLoading ? 'Creating Account...' : 'Sign Up'}
           </button>
         </Form>
 

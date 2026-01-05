@@ -1,0 +1,114 @@
+/* =====================
+   Header Wrapper
+===================== */
+.unibuy-header-wrapper {
+    width: 100%;
+    font-family: 'Fredoka', sans-serif;
+}
+
+/* Top Banner */
+.top-banner-bar {
+    background-color: #ffebf0;
+    color: #ff4a6b;
+    text-align: center;
+    padding: 5px 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Navbar */
+.unibuy-navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 0.5rem 1rem;
+}
+
+/* Navbar Brand */
+.unibuy-navbar .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.8rem;
+    color: #ff8fa3 !important;
+    font-weight: 700;
+}
+
+.unibuy-navbar .brand-icon {
+    font-size: 1.6rem;
+}
+
+/* Horizontal Nav Links */
+.nav-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.nav-item-link {
+    color: #4a4a4a !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.nav-item-link:hover {
+    color: #ff8fa3 !important;
+}
+
+/* Active Link */
+.active-link {
+    color: #ff4a6b !important;
+    font-weight: 700;
+    border-bottom: 2px solid #ff8fa3;
+}
+
+/* Sign-in Pill */
+.login-pill {
+    border: 1px solid #ff8fa3;
+    border-radius: 25px;
+    padding: 5px 15px !important;
+    transition: all 0.3s ease;
+}
+
+.login-pill:hover {
+    background-color: #ff8fa3;
+    color: white !important;
+}
+
+/* Dropdown Styling */
+.unibuy-dropdown .dropdown-menu {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.unibuy-dropdown .dropdown-item {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    color: #4a4a4a !important;
+}
+
+.unibuy-dropdown .dropdown-item:hover {
+    background-color: #ff8fa3;
+    color: white !important;
+}
+
+/* Admin Tag */
+.admin-tag > .dropdown-toggle {
+    font-weight: 700;
+    color: #ff6b81 !important;
+}
+
+/* Cart Icon */
+.nav-link .fas.fa-shopping-cart {
+    margin-right: 5px;
+    font-size: 1.2rem;
+}
+
+/* Responsive: fully horizontal, wrap if needed */
+@media (max-width: 768px) {
+    .nav-horizontal {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+}
