@@ -34,7 +34,6 @@ const CATEGORIES = [
 const STATUS_OPTIONS = ['Processing', 'Shipped', 'Delivered', 'Cancelled'];
 
 const AdminDashboard = () => {
-    // CHANGE THIS to your actual backend server URL (e.g., http://localhost:5000)
     const BASE_URL = 'http://localhost:5000'; 
 
     const [products, setProducts] = useState([]);
@@ -81,6 +80,8 @@ const AdminDashboard = () => {
     };
 
     const formatPrice = price => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
+
+    const truncate = (text, length = 50) => text.length > length ? text.substring(0, length) + '...' : text;
 
     const filteredProducts = useMemo(() => {
         if (!searchTerm.products) return products;
@@ -189,8 +190,18 @@ const AdminDashboard = () => {
                             <Form.Control as="textarea" rows={3} value={newProduct.description} onChange={(e) => setNewProduct({...newProduct, description: e.target.value})} required />
                         </Form.Group>
                         <Row>
-                            <Col><Form.Group className="mb-3"><Form.Label className="fw-bold">Price</Form.Label><Form.Control type="number" value={newProduct.price} onChange={(e) => setNewProduct({...newProduct, price: e.target.value})} required /></Form.Group></Col>
-                            <Col><Form.Group className="mb-3"><Form.Label className="fw-bold">Stock</Form.Label><Form.Control type="number" value={newProduct.countInStock} onChange={(e) => setNewProduct({...newProduct, countInStock: e.target.value})} required /></Form.Group></Col>
+                            <Col>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="fw-bold">Price</Form.Label>
+                                    <Form.Control type="number" value={newProduct.price} onChange={(e) => setNewProduct({...newProduct, price: e.target.value})} required />
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="fw-bold">Stock</Form.Label>
+                                    <Form.Control type="number" value={newProduct.countInStock} onChange={(e) => setNewProduct({...newProduct, countInStock: e.target.value})} required />
+                                </Form.Group>
+                            </Col>
                         </Row>
                         <Form.Group className="mb-3">
                             <Form.Label className="fw-bold">Category</Form.Label>
@@ -220,9 +231,23 @@ const AdminDashboard = () => {
                                 <Form.Control type="text" value={currentProduct.name} onChange={(e) => setCurrentProduct({...currentProduct, name: e.target.value})} required />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label className="fw-bold">Price</Form.Label>
-                                <Form.Control type="number" value={currentProduct.price} onChange={(e) => setCurrentProduct({...currentProduct, price: e.target.value})} required />
+                                <Form.Label className="fw-bold">Description</Form.Label>
+                                <Form.Control as="textarea" rows={3} value={currentProduct.description} onChange={(e) => setCurrentProduct({...currentProduct, description: e.target.value})} required />
                             </Form.Group>
+                            <Row>
+                                <Col>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label className="fw-bold">Price</Form.Label>
+                                        <Form.Control type="number" value={currentProduct.price} onChange={(e) => setCurrentProduct({...currentProduct, price: e.target.value})} required />
+                                    </Form.Group>
+                                </Col>
+                                <Col>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label className="fw-bold">Stock</Form.Label>
+                                        <Form.Control type="number" value={currentProduct.countInStock} onChange={(e) => setCurrentProduct({...currentProduct, countInStock: e.target.value})} required />
+                                    </Form.Group>
+                                </Col>
+                            </Row>
                             <Form.Group className="mb-3">
                                 <Form.Label className="fw-bold">Category</Form.Label>
                                 <Form.Select value={currentProduct.category} onChange={(e) => setCurrentProduct({...currentProduct, category: e.target.value})} required>
@@ -282,15 +307,42 @@ const AdminDashboard = () => {
                         </div>
                         <div className="card-body p-0">
                             <Table hover responsive className="align-middle mb-0">
-                                <thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Category</th><th>Actions</th></tr></thead>
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Price</th>
+                                        <th>Stock</th>
+                                        <th>Category</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     {filteredProducts.map(p => (
                                         <tr key={p._id}>
-                                            <td><div className="product-thumbnail-container"><ImageWithFallback src={p.image.startsWith('http') ? p.image : `${BASE_URL}${p.image}`} alt={p.name} fallbackText={p.name.charAt(0)} className="admin-product-thumb" /></div></td>
-                                            <td>{p.name}</td><td>{formatPrice(p.price)}</td><td><Badge bg="secondary">{p.category}</Badge></td>
                                             <td>
-                                                <Button variant="light" size="sm" onClick={() => { setCurrentProduct(p); setShowEditModal(true); }}><FaEdit className="text-primary"/></Button>
-                                                <Button variant="light" size="sm" onClick={() => handleDeleteProduct(p._id)}><FaTrash className="text-danger"/></Button>
+                                                <div className="product-thumbnail-container">
+                                                    <ImageWithFallback
+                                                        src={p.image.startsWith('http') ? p.image : `${BASE_URL}${p.image}`}
+                                                        alt={p.name}
+                                                        fallbackText={p.name.charAt(0)}
+                                                        className="admin-product-thumb"
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td>{p.name}</td>
+                                            <td>{truncate(p.description, 50)}</td>
+                                            <td>{formatPrice(p.price)}</td>
+                                            <td>{p.countInStock}</td>
+                                            <td><Badge bg="secondary">{p.category}</Badge></td>
+                                            <td>
+                                                <Button variant="light" size="sm" onClick={() => { setCurrentProduct(p); setShowEditModal(true); }}>
+                                                    <FaEdit className="text-primary"/>
+                                                </Button>
+                                                <Button variant="light" size="sm" onClick={() => handleDeleteProduct(p._id)}>
+                                                    <FaTrash className="text-danger"/>
+                                                </Button>
                                             </td>
                                         </tr>
                                     ))}

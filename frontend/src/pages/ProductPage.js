@@ -155,9 +155,20 @@ const ProductPage = () => {
             if (id) return; 
             try {
                 const params = new URLSearchParams(search);
-                const category = params.get('category'); 
+                let category = params.get('category');
                 
-                const url = category ? `/products?category=${category}` : '/products';
+                // Map URL-friendly category names to actual category names
+                const categoryMap = {
+                    'essentials': 'Student Essentials',
+                    'books': 'Books (Academic Focus)',
+                    'stationery': 'Stationery',
+                    'electronics': 'Electronics'
+                };
+                
+                // If the category is in our map, use the mapped value, otherwise use as-is
+                const mappedCategory = category ? (categoryMap[category.toLowerCase()] || category) : null;
+                
+                const url = mappedCategory ? `/products?category=${encodeURIComponent(mappedCategory)}` : '/products';
                 const { data } = await API.get(url);
                 setProducts(data);
             } catch (error) {

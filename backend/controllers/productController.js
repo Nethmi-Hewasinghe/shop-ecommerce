@@ -11,13 +11,23 @@ const getProducts = async (req, res) => {
 
         // If a category is provided in the URL (?category=books), filter the DB results
         if (category) {
-            query.category = { $regex: new RegExp(`^${category}$`, 'i') }; 
+            // First try exact match
+            query.category = category;
+            
+            // If no products found with exact match, try case-insensitive search
+            let products = await Product.find(query);
+            if (products.length === 0) {
+                query.category = { 
+                    $regex: new RegExp(`^${category.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') 
+                };
+            }
         }
 
         const products = await Product.find(query);
         res.json(products);
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching products' });
+        console.error('Error fetching products:', error);
+        res.status(500).json({ message: 'Error fetching products', error: error.message });
     }
 };
 

@@ -15,11 +15,7 @@ import ShippingPage from './pages/ShippingPage';
 import PaymentPage from './pages/PaymentPage';
 import PlaceOrderPage from './pages/PlaceOrderPage';
 import OrderPage from './pages/OrderPage';
-import UserListPage from './pages/admin/UserListPage';
-import UserEditPage from './pages/admin/UserEditPage';
-import ProductListPage from './pages/admin/ProductListPage';
-import ProductEditPage from './pages/admin/ProductEditPage';
-import OrderListPage from './pages/admin/OrderListPage';
+
 import AdminDashboard from './pages/AdminDashboard';
 import OrderHistory from './pages/OrderHistory';
 import TrackOrder from './pages/TrackOrder';
@@ -53,11 +49,7 @@ function App() {
               
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/userlist" element={<UserListPage />} />
-              <Route path="/admin/user/:id/edit" element={<UserEditPage />} />
-              <Route path="/admin/productlist" element={<ProductListPage />} />
-              <Route path="/admin/product/:id/edit" element={<ProductEditPage />} />
-              <Route path="/admin/orderlist" element={<OrderListPage />} />
+              
             </Routes>
           </Container>
         </main>

@@ -6,6 +6,8 @@ import '../styles/HomePage.css';
 import heroBanner from '../images/hero-banner.jpg';
 import Chatbot from '../components/Chatbot';
 
+const BASE_URL = 'http://localhost:5000';
+
 const HomePage = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -51,12 +53,18 @@ const HomePage = () => {
         const fetchProducts = async () => {
             try {
                 const { data } = await API.get('/products');
+
                 const enhancedData = data.map((item, index) => ({
                     ...item,
-                    displayImage: item.image && item.image.startsWith('http') ? item.image : placeholders[index % placeholders.length],
+                    displayImage: item.image
+                        ? (item.image.startsWith('http')
+                            ? item.image
+                            : `${BASE_URL}${item.image}`)
+                        : placeholders[index % placeholders.length],
                     rating: 5,
                     reviews: Math.floor(Math.random() * 500) + 100
                 }));
+
                 setProducts(enhancedData);
                 setLoading(false);
             } catch (error) {
@@ -64,47 +72,51 @@ const HomePage = () => {
                 setLoading(false);
             }
         };
+
         fetchProducts();
     }, []);
 
     const getProductsByCategory = (category) => {
-        return products.filter(product => 
-            product.category && product.category.toLowerCase() === category
+        return products.filter(product =>
+            product.category &&
+            product.category.toLowerCase().includes(category.toLowerCase())
         ).slice(0, 4);
     };
 
-    if (loading) return <div className="loading-screen">🌸 Preparing Cuteness... 🌸</div>;
+    if (loading) {
+        return <div className="loading-screen">Loading products...</div>;
+    }
 
     return (
         <div className="home-page-container">
-            {/* Top Shipping Bar */}
+            {/* Shipping Bar */}
             <div className="shipping-bar">
                 ✨ FREE SHIPPING ON ALL ORDERS OVER Rs. 2000! USE CODE: STUDENTLIFE ✨
             </div>
 
-            {/* Hero Banner */}
+            {/* Hero Section */}
             <div className="hero-container">
-                <img 
-                    src={heroBanner} 
-                    alt="Student Stash Banner" 
+                <img
+                    src={heroBanner}
+                    alt="Student Store Banner"
                     className="hero-landscape-img"
                 />
             </div>
 
-            {/* Category Cards Section */}
+            {/* Categories */}
             <section className="section-container">
                 <div className="section-header">
                     <h2>Shop by Category</h2>
                 </div>
                 <div className="category-cards">
-                    {categories.map((category) => (
-                        <Link 
-                            to={`/products?category=${category.id}`} 
-                            className="category-card" 
+                    {categories.map(category => (
+                        <Link
                             key={category.id}
+                            to={`/products?category=${category.id}`}
+                            className="category-card"
                         >
-                            <div 
-                                className="category-image" 
+                            <div
+                                className="category-image"
                                 style={{ backgroundImage: `url(${category.image})` }}
                             >
                                 <div className="category-overlay">
@@ -119,34 +131,39 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* New Arrivals Section */}
+            {/* New Arrivals */}
             <section className="section-container">
                 <div className="section-header">
                     <h2>New Arrivals</h2>
-                    <Link to="/products" className="view-all">View All <FaArrowRight /></Link>
+                    <Link to="/products" className="view-all">
+                        View All <FaArrowRight />
+                    </Link>
                 </div>
                 <div className="kawaii-grid">
-                    {products.slice(0, 4).map((product) => (
+                    {products.slice(0, 4).map(product => (
                         <ProductCard key={product._id} product={product} />
                     ))}
                 </div>
             </section>
 
             {/* Category Sections */}
-            {categories.map((category) => {
-                const categoryProducts = getProductsByCategory(category.id);
-                if (categoryProducts.length === 0) return null;
+            {categories.map(category => {
+                const items = getProductsByCategory(category.id);
+                if (!items.length) return null;
 
                 return (
                     <section key={category.id} className="section-container">
                         <div className="section-header">
                             <h2>{category.icon} {category.name}</h2>
-                            <Link to={`/products?category=${category.id}`} className="view-all">
+                            <Link
+                                to={`/products?category=${category.id}`}
+                                className="view-all"
+                            >
                                 View All <FaArrowRight />
                             </Link>
                         </div>
                         <div className="kawaii-grid">
-                            {categoryProducts.map((product) => (
+                            {items.map(product => (
                                 <ProductCard key={product._id} product={product} />
                             ))}
                         </div>
@@ -154,11 +171,7 @@ const HomePage = () => {
                 );
             })}
 
-            {/* Decorative elements */}
-            <div className="bg-deco deco-1">🌸</div>
-            <div className="bg-deco deco-2">✨</div>
-            <div className="bg-deco deco-3">🎀</div>
-             <Chatbot />
+            <Chatbot />
         </div>
     );
 };
@@ -167,18 +180,22 @@ const HomePage = () => {
 const ProductCard = ({ product }) => {
     const isOutOfStock = product.countInStock <= 0;
     const isLowStock = product.countInStock > 0 && product.countInStock <= 5;
-    
+
     return (
         <div className={`kawaii-card ${isOutOfStock ? 'out-of-stock' : ''}`}>
             <div className="kawaii-image-wrapper">
-                <img 
-                    src={product.displayImage || product.image} 
-                    alt={product.name} 
-                    className={`kawaii-img ${isOutOfStock ? 'grayscale' : ''}`} 
+                <img
+                    src={product.displayImage}
+                    alt={product.name}
+                    className={`kawaii-img ${isOutOfStock ? 'grayscale' : ''}`}
                 />
+
                 <div className="hover-actions">
-                    <button className="wish-btn"><FaHeart /></button>
+                    <button className="wish-btn">
+                        <FaHeart />
+                    </button>
                 </div>
+
                 {isOutOfStock ? (
                     <span className="tag sold">OUT OF STOCK</span>
                 ) : isLowStock ? (
@@ -187,29 +204,33 @@ const ProductCard = ({ product }) => {
                     <span className="tag new">{product.countInStock} IN STOCK</span>
                 )}
             </div>
+
             <div className="kawaii-info">
                 <h3 className="kawaii-title">{product.name}</h3>
+
                 <div className="kawaii-stars">
-                    {[...Array(5)].map((_, i) => <FaStar key={i} />)}
+                    {[...Array(5)].map((_, i) => (
+                        <FaStar key={i} />
+                    ))}
                     <span className="review-count">({product.reviews})</span>
                 </div>
+
                 <div className="kawaii-price">
                     <span className="currency">Rs. </span>{product.price}
                 </div>
-                <Link 
-                    to={isOutOfStock ? '#' : `/product/${product._id}`} 
+
+                <Link
+                    to={isOutOfStock ? '#' : `/product/${product._id}`}
                     className={`kawaii-btn ${isOutOfStock ? 'disabled' : ''}`}
                     onClick={(e) => isOutOfStock && e.preventDefault()}
                 >
-                    {isOutOfStock ? (
-                        <><i className="fas fa-times-circle me-2"></i> OUT OF STOCK</>
-                    ) : (
-                        <><FaShoppingCart className="me-2" /> VIEW DETAILS</>
-                    )}
+                    {isOutOfStock
+                        ? 'OUT OF STOCK'
+                        : <><FaShoppingCart className="me-2" /> VIEW DETAILS</>}
                 </Link>
+
                 {isLowStock && !isOutOfStock && (
                     <div className="stock-warning">
-                        <i className="fas fa-exclamation-circle me-1"></i>
                         Hurry! Only {product.countInStock} left
                     </div>
                 )}
