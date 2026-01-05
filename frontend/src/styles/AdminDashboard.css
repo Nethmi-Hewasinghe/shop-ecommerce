@@ -1,9 +1,17 @@
+/* ===========================
+   ADMIN DASHBOARD LAYOUT
+=========================== */
+
 .admin-dashboard {
     min-height: 100vh;
-    background-color: #fff5f7;
+    background-color: #fff5f7; /* soft pastel background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* MODAL FIX — THIS SOLVES YOUR ISSUE */
+/* ===========================
+   MODALS
+=========================== */
+
 .admin-modal .modal-dialog {
     max-height: 95vh;
 }
@@ -12,36 +20,135 @@
     height: 95vh;
     display: flex;
     flex-direction: column;
-    border-radius: 12px;
+    border-radius: 16px; /* cute rounded corners */
     border: none;
+    background-color: #fff0f5; /* soft pink pastel */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
-/* ONLY BODY SCROLLS */
+/* BODY SCROLL AREA */
 .modal-scroll-area {
     flex: 1 1 auto;
     overflow-y: auto;
     padding: 1.5rem;
 }
 
-/* FOOTER ALWAYS VISIBLE */
+/* FOOTER STICKY & VISIBLE */
 .sticky-footer {
     flex-shrink: 0;
     border-top: 1px solid #dee2e6;
     padding: 15px 25px;
-    background-color: #f8f9fa;
+    background-color: #fff; /* keeps footer clean */
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
-/* IMAGE PREVIEW */
+/* ===========================
+   IMAGE PREVIEW
+=========================== */
+
 .preview-img {
     max-width: 150px;
     max-height: 120px;
     margin-top: 10px;
     object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
-/* TABLE IMAGES */
+/* ===========================
+   TABLE IMAGES
+=========================== */
+
 .admin-product-thumb {
     width: 60px;
     height: 60px;
     object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* ===========================
+   TABLE STYLING
+=========================== */
+
+.table thead {
+    background: #ffe3f0;
+    color: #ff4f8b;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background-color: #fff0f5;
+    transition: background 0.2s;
+}
+
+/* ===========================
+   BUTTON STYLING
+=========================== */
+
+/* Primary Gradient Buttons */
+button.btn-primary {
+     background: linear-gradient(45deg, #ff4d6d, #ff85a2) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 800 !important;
+    border-radius: 50px !important;
+    letter-spacing: 1px;
+}
+
+button.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255,97,166,0.4);
+}
+
+/* Light Buttons (edit, delete, upload) */
+button.btn-light {
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+
+button.btn-light:hover {
+    background-color: #ffe3ed;
+}
+
+/* ===========================
+   CARDS
+=========================== */
+
+.card {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+/* Card Headers */
+.card-header {
+    background-color: #fff;
+    font-weight: 600;
+    color: #ff4f8b;
+}
+
+/* ===========================
+   BADGES
+=========================== */
+
+.badge {
+    border-radius: 12px;
+    padding: 0.4em 0.8em;
+    font-size: 0.85rem;
+}
+
+/* Status Colors */
+.badge-info {
+    background-color: #6c757d; /* grayish professional */
+}
+
+.badge-warning {
+    background-color: #ffb74d; /* soft orange */
+}
+
+.badge-secondary {
+    background-color: #c4c4c4; /* soft gray */
 }

@@ -1,0 +1,89 @@
+.cart-container {
+    background-color: #fff9fb; /* Soft Pink background */
+    min-height: 100vh;
+}
+
+/* Individual Card Styling for Each Item */
+.item-card {
+    transition: transform 0.2s ease;
+    border: 1px solid #ffeef2 !important;
+}
+
+.item-card:hover {
+    transform: translateX(5px);
+}
+
+/* FIX: Image Container to control size */
+.cart-product-img-wrapper {
+    width: 100%;
+    height: 90px;
+    background: #fff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid #fff0f3;
+}
+
+.cart-product-img-wrapper img {
+    max-height: 85%;
+    max-width: 85%;
+    object-fit: contain;
+}
+
+/* PINK AESTHETIC CLASSES */
+.text-pink-dark { color: #d63384 !important; }
+.text-pink { color: #ff85a2 !important; }
+.btn-pink { background-color: #ff4d6d !important; border: none; }
+.btn-pink:hover { background-color: #ff758f !important; }
+
+/* QUANTITY & BUTTONS */
+.qty-dropdown {
+    width: 70px !important;
+    border-color: #ffccd5 !important;
+    font-weight: 600;
+}
+
+.btn-circle-delete {
+    width: 40px;
+    height: 40px;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ffccd5 !important;
+    background-color: white !important;
+}
+
+/* SUMMARY & MODAL */
+.summary-card-modern {
+    border: 1px solid #ffeef2 !important;
+}
+
+.btn-kawaii-checkout {
+    background: linear-gradient(45deg, #ff4d6d, #ff85a2) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 800 !important;
+    border-radius: 50px !important;
+    letter-spacing: 1px;
+}
+
+.alert-pink {
+    background-color: #fff0f3 !important;
+    color: #d63384 !important;
+}
+
+.kawaii-input {
+    border-radius: 12px !important;
+    border: 1px solid #ffccd5 !important;
+    padding: 10px 15px !important;
+}
+
+/* Responsive Sticky Sidebar */
+@media (min-width: 992px) {
+    .summary-card-modern {
+        top: 100px;
+    }
+}

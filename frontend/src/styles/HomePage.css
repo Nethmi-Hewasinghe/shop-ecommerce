@@ -71,9 +71,9 @@ a {
 /* Hero Section */
 .hero-container {
     width: 100%;
-    max-width: 1200px;
-    margin: 20px auto 40px;
-    padding: 0 15px;
+  
+    
+    
     border-radius: 15px;
     overflow: hidden;
 }

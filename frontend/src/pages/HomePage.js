@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaHeart, FaStar, FaShoppingCart, FaArrowRight } from 'react-icons/fa';
 import API from '../services/api';
 import '../styles/HomePage.css';
-import heroBanner from '../images/hero-banner.jpg';
+import heroBanner from '../images/headerimg2.png';
 import Chatbot from '../components/Chatbot';
 
 const BASE_URL = 'http://localhost:5000';

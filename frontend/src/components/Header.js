@@ -7,7 +7,7 @@ import '../styles/Header.css';
 
 const Header = () => {
     const navigate = useNavigate();
-    const { cartItems, openCart, cartCount } = useContext(CartContext);
+    const { cartItems, cartCount } = useContext(CartContext);
     const userInfo = localStorage.getItem('userInfo')
         ? JSON.parse(localStorage.getItem('userInfo'))
         : null;
@@ -24,12 +24,15 @@ const Header = () => {
 
     return (
         <header className="unibuy-header-wrapper">
+            {/* Top Banner */}
             <div className="top-banner-bar">
                 ✨ FREE SHIPPING ON ALL ORDERS OVER Rs. 2000! USE CODE: STUDENTLIFE ✨
             </div>
 
+            {/* Navbar */}
             <Navbar className="unibuy-navbar">
                 <Container fluid className="d-flex justify-content-between align-items-center">
+                    
                     {/* Brand */}
                     <Navbar.Brand as={NavLink} to="/" end className="unibuy-brand">
                         <span className="brand-icon">🌸</span> UniBuy
@@ -37,42 +40,43 @@ const Header = () => {
 
                     {/* Links */}
                     <Nav className="nav-horizontal">
-                        <Nav.Link onClick={openCart} className="position-relative">
+
+                        {/* Cart Icon */}
+                        <Nav.Link 
+                            as={NavLink} 
+                            to="/cart" 
+                            className="position-relative"
+                        >
                             <FaShoppingCart className="me-1" />
-                            Cart
+                            
                             {cartCount > 0 && (
-                                <Badge pill bg="danger" className="position-absolute top-0 start-100 translate-middle">
+                                <Badge 
+                                    pill 
+                                    bg="danger" 
+                                    className="position-absolute top-0 start-100 translate-middle"
+                                >
                                     {cartCount}
                                 </Badge>
                             )}
                         </Nav.Link>
 
-                        <Nav.Link onClick={openCart} className="position-relative">
-                            <FaShoppingCart className="me-1" />
-                            Cart
-                            {cartCount > 0 && (
-                                <Badge pill bg="danger" className="position-absolute top-0 start-100 translate-middle">
-                                    {cartCount}
-                                </Badge>
-                            )}
-                        </Nav.Link>
-
+                        {/* Orders Link */}
                         <Nav.Link as={NavLink} to="/orders" className={getNavLinkClass}>
                             My Orders
                         </Nav.Link>
 
+                        {/* Authentication */}
                         {userInfo ? (
-                            <>
-                                <Nav.Link onClick={logoutHandler} className="nav-item-link">
-                                    Logout
-                                </Nav.Link>
-                            </>
+                            <Nav.Link onClick={logoutHandler} className="nav-item-link">
+                                Logout
+                            </Nav.Link>
                         ) : (
                             <Nav.Link as={NavLink} to="/login" className="nav-item-link login-pill">
                                 Sign In
                             </Nav.Link>
                         )}
 
+                        {/* Admin Dropdown */}
                         {userInfo && userInfo.isAdmin && (
                             <NavDropdown title="Admin" id="adminmenu" className="unibuy-dropdown admin-tag">
                                 <NavDropdown.Item as={NavLink} to="/admin" className={getNavLinkClass}>

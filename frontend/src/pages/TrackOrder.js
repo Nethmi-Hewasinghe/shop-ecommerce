@@ -1,10 +1,8 @@
-// frontend/src/pages/TrackOrder.js
 import React, { useState, useEffect } from 'react';
-import { Container, Card, Form, Button, Alert, Row, Col, ListGroup, Spinner } from 'react-bootstrap';
-import { FaSearch, FaTruck, FaMapMarkerAlt, FaCalendarAlt, FaInfoCircle, FaCheckCircle, FaTimesCircle, FaPhone } from 'react-icons/fa';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Container, Card, Form, Button, Alert, Row, Col, Spinner } from 'react-bootstrap';
+import { FaSearch, FaTruck, FaInfoCircle, FaCheckCircle, FaMoneyBillWave } from 'react-icons/fa';
+import { useParams, useNavigate } from 'react-router-dom';
 import API from '../services/api';
-
 
 const TrackOrder = () => {
     const { id: orderId } = useParams();
@@ -17,199 +15,71 @@ const TrackOrder = () => {
     const fetchOrder = async (id) => {
         setLoading(true);
         setError('');
-
         try {
             const { data } = await API.get(`/orders/track/${id}`);
             setOrder(data);
         } catch (err) {
-            setError('Order not found. Please check your order ID and try again.');
-            console.error('Error fetching order:', err);
+            setError('Order not found. Please verify your order ID.');
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
-        if (orderId) {
-            fetchOrder(orderId);
-        } else {
-            setLoading(false);
-        }
-    }, [orderId]);
+    useEffect(() => { if (orderId) fetchOrder(orderId); else setLoading(false); }, [orderId]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!searchId.trim()) {
-            setError('Please enter an order ID');
-            return;
-        }
-        navigate(`/track-order/${searchId}`);
-    };
-
-    const getStatusBadge = (status) => {
-        const statuses = {
-            'pending': { text: 'Pending Payment', variant: 'warning' },
-            'processing': { text: 'Processing', variant: 'info' },
-            'shipped': { text: 'Shipped', variant: 'primary' },
-            'delivered': { text: 'Delivered', variant: 'success' },
-            'cancelled': { text: 'Cancelled', variant: 'danger' }
-        };
-
-        const currentStatus = statuses[status?.toLowerCase()] || { text: 'Unknown', variant: 'secondary' };
-        return <span className={`badge bg-${currentStatus.variant}`}>{currentStatus.text}</span>;
-    };
-
-    const getStatusIcon = (status, currentStatus) => {
-        if (status === currentStatus) return <FaCheckCircle className="text-success" />;
-        if (status === 'cancelled' && currentStatus === 'cancelled') return <FaTimesCircle className="text-danger" />;
-        return <FaInfoCircle className="text-muted" />;
-    };
-
-    const getStatusDate = (order, status) => {
-        const dates = {
-            'pending': order.createdAt,
-            'processing': order.paidAt,
-            'shipped': order.shippedAt,
-            'delivered': order.deliveredAt
-        };
-        return dates[status] ? new Date(dates[status]).toLocaleDateString() : 'Pending';
+        if (searchId.trim()) navigate(`/track-order/${searchId}`);
     };
 
     return (
         <Container className="py-5">
             <Row className="justify-content-center">
-                <Col md={8} lg={6}>
-                    <Card className="shadow-sm mb-4">
-                        <Card.Body>
-                            <h2 className="text-center mb-4">Track Your Order</h2>
-                            <Form onSubmit={handleSubmit}>
-                                <div className="input-group mb-3">
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Enter your order ID"
-                                        value={searchId}
-                                        onChange={(e) => setSearchId(e.target.value)}
-                                        disabled={loading}
-                                    />
-                                    <Button 
-                                        variant="primary" 
-                                        type="submit"
-                                        disabled={loading}
-                                    >
-                                        {loading ? <Spinner animation="border" size="sm" /> : <><FaSearch className="me-1" /> Track</>}
-                                    </Button>
-                                </div>
-                                {!orderId && <div className="text-center text-muted small">Enter your order ID to track your package</div>}
+                <Col md={8} lg={7}>
+                    <Card className="shadow-sm border-0 mb-4 rounded-4">
+                        <Card.Body className="p-4">
+                            <h2 className="text-center mb-4 fw-bold">Track Your Package 📦</h2>
+                            <Form onSubmit={handleSubmit} className="d-flex gap-2">
+                                <Form.Control size="lg" placeholder="Order ID (e.g. 64b1...)" value={searchId} onChange={(e) => setSearchId(e.target.value)} />
+                                <Button variant="primary" type="submit" disabled={loading}><FaSearch /></Button>
                             </Form>
                         </Card.Body>
                     </Card>
 
-                    {loading && orderId ? (
-                        <div className="text-center my-5">
-                            <Spinner animation="border" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                            </Spinner>
-                            <p className="mt-2">Loading order details...</p>
-                        </div>
-                    ) : error ? (
-                        <Alert variant="danger" className="text-center">
-                            {error}
-                            <div className="mt-2">
-                                <Link to="/orders" className="btn btn-outline-primary btn-sm">
-                                    View My Orders
-                                </Link>
-                            </div>
-                        </Alert>
-                    ) : order ? (
-                        <Card className="shadow-sm">
-                            <Card.Header className="bg-white">
+                    {loading && <div className="text-center py-5"><Spinner animation="border" /></div>}
+
+                    {order && (
+                        <Card className="shadow-sm border-0 rounded-4 overflow-hidden">
+                            <Card.Header className="bg-white border-0 py-3">
                                 <div className="d-flex justify-content-between align-items-center">
-                                    <h4 className="mb-0">Order #{order._id.substring(0, 8).toUpperCase()}</h4>
-                                    {getStatusBadge(order.status)}
-                                </div>
-                                <div className="text-muted small mt-1">
-                                    Placed on {new Date(order.createdAt).toLocaleDateString()}
+                                    <span className="fw-bold">Status: <span className="text-primary text-uppercase">{order.status}</span></span>
+                                    <FaTruck className="text-muted h4 mb-0" />
                                 </div>
                             </Card.Header>
-                            
-                            <Card.Body>
-                                <div className="timeline mb-4">
-                                    {['pending', 'processing', 'shipped', 'delivered'].map((status) => (
-                                        <div 
-                                            key={status} 
-                                            className={`timeline-step ${order.status === status ? 'active' : ''} ${status === 'cancelled' ? 'cancelled' : ''}`}
-                                        >
-                                            <div className="timeline-icon">
-                                                {getStatusIcon(status, order.status)}
-                                            </div>
-                                            <div className="timeline-content">
-                                                <h6 className="text-capitalize mb-0">{status}</h6>
-                                                <small className="text-muted">{getStatusDate(order, status)}</small>
-                                            </div>
+                            <Card.Body className="p-4 bg-light">
+                                <Alert variant="primary" className="border-0 shadow-sm">
+                                    <div className="d-flex align-items-center">
+                                        <FaMoneyBillWave className="me-3 h4 mb-0" />
+                                        <div>
+                                            <h6 className="mb-0 fw-bold">Cash on Delivery</h6>
+                                            <small>Please keep <strong>Rs. {order.totalPrice.toFixed(2)}</strong> ready to pay the courier.</small>
                                         </div>
-                                    ))}
+                                    </div>
+                                </Alert>
+                                <div className="ps-3 border-start border-2 border-primary ms-2 py-2">
+                                    <div className="mb-4">
+                                        <FaCheckCircle className="text-success me-2" /> <strong>Order Received</strong>
+                                        <div className="text-muted small ps-4">{new Date(order.createdAt).toLocaleString()}</div>
+                                    </div>
+                                    <div className={order.status === 'delivered' ? 'text-dark' : 'text-muted'}>
+                                        <FaCheckCircle className={order.status === 'delivered' ? 'text-success me-2' : 'text-muted me-2'} /> 
+                                        <strong>Expected Delivery</strong>
+                                        <div className="small ps-4">Usually within 3-5 business days.</div>
+                                    </div>
                                 </div>
-
-                                <Row>
-                                    <Col md={6} className="mb-3 mb-md-0">
-                                        <h5><FaTruck className="me-2" />Shipping Information</h5>
-                                        {order.shippingAddress && (
-                                            <div className="ps-4">
-                                                <p className="mb-1 fw-medium">{order.shippingAddress.address}</p>
-                                                <p className="mb-1">
-                                                    {order.shippingAddress.city}, {order.shippingAddress.postalCode}
-                                                </p>
-                                                <p className="mb-1">{order.shippingAddress.country}</p>
-                                                {order.shippingAddress.phone && (
-                                                    <p className="mb-0">
-                                                        <FaPhone className="me-2" /> {order.shippingAddress.phone}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        )}
-                                    </Col>
-                                    <Col md={6}>
-                                        <h5><FaInfoCircle className="me-2" />Order Summary</h5>
-                                        <ListGroup variant="flush" className="border rounded">
-                                            <ListGroup.Item className="d-flex justify-content-between px-3 py-2">
-                                                <span>Items ({order.orderItems.reduce((acc, item) => acc + item.qty, 0)}):</span>
-                                                <span>Rs. {order.itemsPrice?.toFixed(2)}</span>
-                                            </ListGroup.Item>
-                                            <ListGroup.Item className="d-flex justify-content-between px-3 py-2">
-                                                <span>Shipping:</span>
-                                                <span className={order.shippingPrice > 0 ? '' : 'text-success'}>
-                                                    {order.shippingPrice > 0 ? `Rs. ${order.shippingPrice.toFixed(2)}` : 'FREE'}
-                                                </span>
-                                            </ListGroup.Item>
-                                            <ListGroup.Item className="d-flex justify-content-between fw-bold px-3 py-2 bg-light">
-                                                <span>Total:</span>
-                                                <span>Rs. {order.totalPrice?.toFixed(2)}</span>
-                                            </ListGroup.Item>
-                                        </ListGroup>
-                                    </Col>
-                                </Row>
                             </Card.Body>
-                            
-                            <Card.Footer className="bg-white border-top">
-                                <div className="d-flex justify-content-between">
-                                    <Button 
-                                        variant="outline-secondary" 
-                                        as={Link} 
-                                        to="/orders"
-                                    >
-                                        Back to Orders
-                                    </Button>
-                                    <Button 
-                                        variant="primary" 
-                                        as={Link} 
-                                        to={`/order/${order._id}`}
-                                    >
-                                        View Order Details
-                                    </Button>
-                                </div>
-                            </Card.Footer>
                         </Card>
-                    ) : null}
+                    )}
                 </Col>
             </Row>
         </Container>

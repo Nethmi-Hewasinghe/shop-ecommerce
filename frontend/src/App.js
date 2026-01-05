@@ -11,10 +11,8 @@ import CartPage from './pages/CartPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
-import ShippingPage from './pages/ShippingPage';
-import PaymentPage from './pages/PaymentPage';
-import PlaceOrderPage from './pages/PlaceOrderPage';
-import OrderPage from './pages/OrderPage';
+
+
 
 import AdminDashboard from './pages/AdminDashboard';
 import OrderHistory from './pages/OrderHistory';
@@ -39,10 +37,8 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/shipping" element={<ShippingPage />} />
-              <Route path="/payment" element={<PaymentPage />} />
-              <Route path="/placeorder" element={<PlaceOrderPage />} />
-              <Route path="/order/:id" element={<OrderPage />} />
+              
+              
               <Route path="/orders" element={<OrderHistory />} />
               <Route path="/track-order" element={<TrackOrder />} />
               <Route path="/track-order/:id" element={<TrackOrder />} />

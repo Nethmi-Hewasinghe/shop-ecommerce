@@ -8,12 +8,9 @@ import {
     Col,
     Alert,
     Badge,
-    Spinner,
-    InputGroup,
     Nav
 } from 'react-bootstrap';
 import {
-    FaSearch,
     FaPlus,
     FaEdit,
     FaTrash,
@@ -168,7 +165,7 @@ const AdminDashboard = () => {
     const renderFileUpload = (isEdit = false) => (
         <Form.Group className="mb-3">
             <Form.Control type="file" hidden id={`upload-${isEdit}`} onChange={e => uploadFileHandler(e, isEdit)} accept="image/*" />
-            <Button variant="outline-secondary" onClick={() => document.getElementById(`upload-${isEdit}`).click()} disabled={uploading}>
+            <Button variant="light" onClick={() => document.getElementById(`upload-${isEdit}`).click()} disabled={uploading}>
                 <FaUpload className="me-2" /> {uploading ? 'Uploading...' : 'Choose Image'}
             </Button>
         </Form.Group>
@@ -213,7 +210,7 @@ const AdminDashboard = () => {
                         {renderFileUpload(false)}
                         {newProduct.image && <img src={newProduct.image.startsWith('http') ? newProduct.image : `${BASE_URL}${newProduct.image}`} className="preview-img img-thumbnail" alt="preview" />}
                     </Modal.Body>
-                    <Modal.Footer className="bg-light sticky-footer">
+                    <Modal.Footer className="sticky-footer">
                         <Button variant="secondary" onClick={() => setShowAddModal(false)}>Cancel</Button>
                         <Button variant="primary" type="submit" disabled={uploading}>Save Product</Button>
                     </Modal.Footer>
@@ -257,7 +254,7 @@ const AdminDashboard = () => {
                             {renderFileUpload(true)}
                             {currentProduct.image && <img src={currentProduct.image.startsWith('http') ? currentProduct.image : `${BASE_URL}${currentProduct.image}`} className="preview-img img-thumbnail" alt="edit preview" />}
                         </Modal.Body>
-                        <Modal.Footer className="bg-light sticky-footer">
+                        <Modal.Footer className="sticky-footer">
                             <Button variant="secondary" onClick={() => setShowEditModal(false)}>Cancel</Button>
                             <Button variant="primary" type="submit" disabled={uploading}>Update Product</Button>
                         </Modal.Footer>
